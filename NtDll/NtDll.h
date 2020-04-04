@@ -28,7 +28,7 @@
     }                                                                            \
     static CONCATENATE( P, Name ) CONCATENATE( pfn, Name )                       \
         = reinterpret_cast< CONCATENATE( P, Name ) >(                            \
-            GetProcAddress(	hNtDll, #Name )                                      \
+            GetProcAddress( hNtDll, #Name )                                      \
     );                                                                           \
     if (! CONCATENATE( pfn, Name )) {                                            \
         exception::ThrowError( ERROR_CALL_NOT_IMPLEMENTED, CURRENT_LOCATION );   \
