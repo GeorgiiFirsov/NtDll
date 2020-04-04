@@ -12,6 +12,8 @@ Project("{8BC9CEB8-8B4A-11D0-8D11-00A0C91BC942}") = "NtDllTest", "NtDllTest\NtDl
 EndProject
 Project("{2150E333-8FDC-42A3-9474-1A3956D46DE8}") = "Solution Items", "Solution Items", "{E576FF7D-A7C3-4EA4-B3FB-921D001449C4}"
 	ProjectSection(SolutionItems) = preProject
+		.gitignore = .gitignore
+		LICENSE = LICENSE
 		Readme.md = Readme.md
 	EndProjectSection
 EndProject
