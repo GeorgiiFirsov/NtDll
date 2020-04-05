@@ -143,6 +143,7 @@
   </ItemDefinitionGroup>
   <ItemGroup>
     <ClInclude Include="NtDll.h" />
+    <ClInclude Include="NtDllDef.h" />
     <ClInclude Include="NtDllError.h" />
     <ClInclude Include="Utils.h" />
   </ItemGroup>

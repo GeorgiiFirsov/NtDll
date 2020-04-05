@@ -1,9 +1,10 @@
 #pragma once
 
 // Windows header files
-#include "Windows.h"
+#include <Windows.h>
 
 // Library includes
+#include "NtDllDef.h"
 #include "NtDllError.h"
 #include "Utils.h"
 
@@ -14,6 +15,7 @@
 #define NT_DLL_FUNCTION( Type, Call, Name, ... /* Args */ )                      \
     using CONCATENATE( P, Name ) = Type (Call *) ( __VA_ARGS__ );                \
     static Type Call Name( __VA_ARGS__ ) 
+
 
 // Macro used to easily load dll-function from NtDll.dll. Ite receives a function name,
 // but it must not be a string, it will be stringified as soon as needed by preprocessor!
@@ -329,6 +331,271 @@ namespace nt_dll {
         {
             LOAD_FUNCTION( RtlAddGrowableFunctionTable );
             return pfnRtlAddGrowableFunctionTable( DynamicTable, FunctionTable, EntryCount, MaximumEntryCount, RangeBase, RangeEnd );
+        }
+
+        // *********************************************************************************************************
+        // RtlAddRefMemoryStream
+        // Undocumented
+        // 
+
+        NT_DLL_FUNCTION(
+            ULONG, NTAPI, RtlAddRefMemoryStream,
+            _In_ IStream* Stream
+        )
+        {
+            LOAD_FUNCTION( RtlAddRefMemoryStream );
+            return pfnRtlAddRefMemoryStream( Stream );
+        }
+
+        // *********************************************************************************************************
+        // RtlAddSIDToBoundaryDescriptor
+        // Undocumented
+        // 
+
+        NT_DLL_FUNCTION(
+            NTSTATUS, NTAPI, RtlAddSIDToBoundaryDescriptor,
+            _Inout_ PVOID* BoundaryDescriptor,
+            _In_    PSID   RequiredSid
+        )
+        {
+            LOAD_FUNCTION( RtlAddSIDToBoundaryDescriptor );
+            return pfnRtlAddSIDToBoundaryDescriptor( BoundaryDescriptor, RequiredSid );
+        }
+
+        // *********************************************************************************************************
+        // RtlAddVectoredContinueHandler
+        // Undocumented
+        // 
+
+        NT_DLL_FUNCTION(
+            PVOID, NTAPI, RtlAddVectoredContinueHandler,
+            _In_ ULONG                       FirstHandler,
+            _In_ PVECTORED_EXCEPTION_HANDLER VectoredHandler
+        )
+        {
+            LOAD_FUNCTION( RtlAddVectoredContinueHandler );
+            return pfnRtlAddVectoredContinueHandler( FirstHandler, VectoredHandler );
+        }
+
+        // *********************************************************************************************************
+        // RtlAddVectoredExceptionHandler
+        // Undocumented
+        // 
+
+        NT_DLL_FUNCTION(
+            PVOID, NTAPI, RtlAddVectoredExceptionHandler,
+            _In_ ULONG                       FirstHandler,
+            _In_ PVECTORED_EXCEPTION_HANDLER VectoredHandler
+        )
+        {
+            LOAD_FUNCTION( RtlAddVectoredExceptionHandler );
+            return pfnRtlAddVectoredExceptionHandler( FirstHandler, VectoredHandler );
+        }
+
+        // *********************************************************************************************************
+        // RtlAddressInSectionTable 
+        // Undocumented
+        // 
+
+        NT_DLL_FUNCTION(
+            PVOID, NTAPI, RtlAddressInSectionTable,
+            _In_ PIMAGE_NT_HEADERS NtHeaders,
+            _In_ PVOID             Base,
+            _In_ ULONG             Address
+        )
+        {
+            LOAD_FUNCTION( RtlAddressInSectionTable );
+            return pfnRtlAddressInSectionTable( NtHeaders, Base, Address );
+        }
+
+        // *********************************************************************************************************
+        // RtlAdjustPrivilege 
+        // Undocumented
+        // 
+        
+        NT_DLL_FUNCTION(
+            NTSTATUS, NTAPI, RtlAdjustPrivilege,
+            _In_  ULONG    Privilege,
+            _In_  BOOLEAN  Enable,
+            _In_  BOOLEAN  CurrentThread,
+            _Out_ PBOOLEAN Enabled
+        )
+        {
+            LOAD_FUNCTION( RtlAdjustPrivilege );
+            return pfnRtlAdjustPrivilege( Privilege, Enable, CurrentThread, Enabled );
+        }
+
+        // *********************************************************************************************************
+        // RtlAllocateAndInitializeSid 
+        // https://docs.microsoft.com/en-us/windows-hardware/drivers/ddi/ntifs/nf-ntifs-rtlallocateandinitializesid
+        // 
+        
+        NT_DLL_FUNCTION(
+            _Must_inspect_result_ 
+            NTSTATUS, NTAPI, RtlAllocateAndInitializeSid,
+            _In_     PSID_IDENTIFIER_AUTHORITY IdentifierAuthority,
+            _In_     UCHAR                     SubAuthorityCount,
+            _In_     ULONG                     SubAuthority0,
+            _In_     ULONG                     SubAuthority1,
+            _In_     ULONG                     SubAuthority2,
+            _In_     ULONG                     SubAuthority3,
+            _In_     ULONG                     SubAuthority4,
+            _In_     ULONG                     SubAuthority5,
+            _In_     ULONG                     SubAuthority6,
+            _In_     ULONG                     SubAuthority7,
+            _Outptr_ PSID*                     Sid
+        )
+        {
+            LOAD_FUNCTION( RtlAllocateAndInitializeSid );
+            return pfnRtlAllocateAndInitializeSid( 
+                IdentifierAuthority, SubAuthorityCount, 
+                SubAuthority0, SubAuthority1, SubAuthority2, 
+                SubAuthority3, SubAuthority4, SubAuthority5, 
+                SubAuthority6, SubAuthority7, Sid 
+            );
+        }
+
+        // *********************************************************************************************************
+        // RtlAllocateAndInitializeSidEx 
+        // Undocumented
+        // 
+        
+        NT_DLL_FUNCTION(
+            _Must_inspect_result_
+            NTSTATUS, NTAPI, RtlAllocateAndInitializeSidEx,
+            _In_                          PSID_IDENTIFIER_AUTHORITY IdentifierAuthority,
+            _In_                          UCHAR                     SubAuthorityCount,
+            _In_reads_(SubAuthorityCount) PULONG                    SubAuthorities,
+            _Outptr_                      PSID*                     Sid
+        )
+        {
+            LOAD_FUNCTION( RtlAllocateAndInitializeSidEx );
+            return pfnRtlAllocateAndInitializeSidEx( IdentifierAuthority, SubAuthorityCount, SubAuthorities, Sid );
+        }
+
+        // *********************************************************************************************************
+        // RtlAllocateHeap 
+        // https://docs.microsoft.com/en-us/windows-hardware/drivers/ddi/ntifs/nf-ntifs-rtlallocateheap
+        // 
+
+        NT_DLL_FUNCTION(
+            PVOID, NTAPI, RtlAllocateHeap,
+            _In_ PVOID  HeapHandle,
+            _In_ ULONG  Flags,
+            _In_ SIZE_T Size
+        )
+        {
+            LOAD_FUNCTION( RtlAllocateHeap );
+            return pfnRtlAllocateHeap( HeapHandle, Flags, Size );
+        }
+
+        // *********************************************************************************************************
+        // RtlAllocateMemoryBlockLookaside
+        // Undocumented
+        //
+
+        NT_DLL_FUNCTION(
+            NTSTATUS, NTAPI, RtlAllocateMemoryBlockLookaside,
+            _In_     PVOID  MemoryBlockLookaside,
+            _In_     ULONG  BlockSize,
+            _Outptr_ PVOID* Block
+        )
+        {
+            LOAD_FUNCTION( RtlAllocateMemoryBlockLookaside );
+            return pfnRtlAllocateMemoryBlockLookaside( MemoryBlockLookaside, BlockSize, Block );
+        }
+
+        // *********************************************************************************************************
+        // RtlAllocateMemoryZone
+        // Undocumented
+        //
+
+        NT_DLL_FUNCTION(
+            NTSTATUS, NTAPI, RtlAllocateMemoryZone,
+            _In_     PVOID  MemoryZone,
+            _In_     SIZE_T BlockSize,
+            _Outptr_ PVOID* Block
+        )
+        {
+            LOAD_FUNCTION( RtlAllocateMemoryZone );
+            return pfnRtlAllocateMemoryZone( MemoryZone, BlockSize, Block );
+        }
+
+        // *********************************************************************************************************
+        // RtlAnsiCharToUnicodeChar
+        // https://docs.microsoft.com/en-us/previous-versions/windows/hardware/drivers/ff561132(v%3Dvs.85)
+        //
+
+        NT_DLL_FUNCTION(
+            WCHAR, NTAPI, RtlAnsiCharToUnicodeChar,
+            _Inout_ PUCHAR* SourceCharacter
+        )
+        {
+            LOAD_FUNCTION( RtlAnsiCharToUnicodeChar );
+            return pfnRtlAnsiCharToUnicodeChar( SourceCharacter );
+        }
+
+        // *********************************************************************************************************
+        // RtlAnsiStringToUnicodeString
+        // https://docs.microsoft.com/en-us/windows-hardware/drivers/ddi/wdm/nf-wdm-rtlansistringtounicodestring
+        //
+
+        NT_DLL_FUNCTION(
+            NTSTATUS, NTAPI, RtlAnsiStringToUnicodeString,
+            _Out_ PUNICODE_STRING DestinationString,
+            _In_  PCANSI_STRING   SourceString,
+            _In_  BOOLEAN         AllocateDestinationString
+        )
+        {
+            LOAD_FUNCTION( RtlAnsiStringToUnicodeString );
+            return pfnRtlAnsiStringToUnicodeString( DestinationString, SourceString, AllocateDestinationString );
+        }
+
+        // *********************************************************************************************************
+        // RtlAppendAsciizToString
+        // Undocumented
+        //
+
+        NT_DLL_FUNCTION(
+            NTSTATUS, NTAPI, RtlAppendAsciizToString,
+            _Inout_  PSTRING Destination,
+            _In_opt_ PCSZ    Source
+        )
+        {
+            LOAD_FUNCTION( RtlAppendAsciizToString );
+            return pfnRtlAppendAsciizToString( Destination, Source );
+        }
+
+        // *********************************************************************************************************
+        // RtlAppendPathElementGo 
+        // Undocumented
+        //
+
+        NT_DLL_FUNCTION(
+            NTSTATUS, WINAPI, RtlAppendPathElementGo,
+            _In_    ULONG                      Flags,
+            _Inout_ PRTL_UNICODE_STRING_BUFFER pStrBuffer,
+            _In_    PCUNICODE_STRING           pAddend
+
+        )
+        {
+            LOAD_FUNCTION( RtlAppendPathElementGo );
+            return pfnRtlAppendPathElementGo( Flags, pStrBuffer, pAddend );
+        }
+
+        // *********************************************************************************************************
+        // RtlAppendStringToString 
+        // https://docs.microsoft.com/en-us/windows-hardware/drivers/ddi/ntifs/nf-ntifs-rtlappendstringtostring
+        //
+        
+        NT_DLL_FUNCTION(
+            NTSTATUS, NTAPI, RtlAppendStringToString,
+            _Inout_ PSTRING       Destination,
+            _In_    CONST STRING* Source
+        )
+        {
+            LOAD_FUNCTION( RtlAppendStringToString );
+            return pfnRtlAppendStringToString( Destination, Source );
         }
 
         // *********************************************************************************************************
