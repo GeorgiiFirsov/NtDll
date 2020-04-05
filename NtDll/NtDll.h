@@ -3,6 +3,10 @@
 // Windows header files
 #include <Windows.h>
 
+// STL headers
+#include <string>
+#include <type_traits>
+
 // Library includes
 #include "NtDllDef.h"
 #include "NtDllError.h"
@@ -45,15 +49,84 @@ namespace nt_dll {
     class NtDll
     {
     public:
+
+        // This function template can be used in case if you need to call
+        // a function that is not implemented in this library yet. To use it
+        // you need to specify the type of function you want to call explicitly
+        // as an template parameter and pass the name of a function as the first
+        // argument. Other arguments will be forwarded to callable via perfect
+        // forwarding. Return type will be deduced automatically.
+        template<typename FuncPtr, typename... Args> 
+        static typename std::result_of<FuncPtr(Args...)>::type 
+        CallSpecific( const std::string& sFunctionName, Args&&... args )
+        {
+            //
+            // Fistly we need to check if passed type is a pointer and
+            // in case of failure we'll print readable message.
+            // 
+
+            static_assert( 
+                std::is_pointer<FuncPtr>::value, 
+                "FuncPtr in " __FUNCTION__ " must be pointer-to-function type" 
+            );
+
+            //
+            // Maybe this function will be called more than one time, so
+            // I'll load dynamic library once.
+            // 
+
+            static HMODULE hNtDll = GetModuleHandle( TEXT( "ntdll.dll" ) );
+            static DWORD dwError = GetLastError();
+            
+            if (!hNtDll) {
+                exception::ThrowError( dwError, CURRENT_LOCATION );
+            }
+
+            //
+            // Searching for function in library. If none exists I'll
+            // throw an exception, otherwise call will be performed.
+            // 
+
+            auto pfnCallable = reinterpret_cast<FuncPtr>(
+                GetProcAddress( hNtDll, sFunctionName.c_str() )    
+            );
+
+            if (!pfnCallable) {
+                exception::ThrowError( ERROR_NOT_FOUND, CURRENT_LOCATION );
+            }
+
+            return pfnCallable( std::forward<Args>( args )... );
+        }
+
         // ---------------------------------------------------------------------------------------------------------
         //                                           Public functions
         // ---------------------------------------------------------------------------------------------------------
 
+#pragma region Public functions
+
         // None implemented yet
+
+#pragma endregion
 
         // ---------------------------------------------------------------------------------------------------------
         //                                            Rtl functions
         // ---------------------------------------------------------------------------------------------------------
+
+#pragma region Rtl functions
+
+        // *********************************************************************************************************
+        // RtlAbortRXact
+        // Undocumented
+        // 
+
+        NT_DLL_FUNCTION(
+            NTSTATUS, NTAPI, RtlAbortRXact,
+            _In_ PRTL_RXACT_CONTEXT RXactContext
+        )
+        {
+            LOAD_FUNCTION( RtlAbortRXact );
+            return pfnRtlAbortRXact( RXactContext );
+        }
 
         // *********************************************************************************************************
         // RtlAbsoluteToSelfRelativeSD
@@ -72,6 +145,19 @@ namespace nt_dll {
         }
 
         // *********************************************************************************************************
+        // RtlAcquirePebLock
+        // Undocumented
+        // 
+
+        NT_DLL_FUNCTION(
+            VOID, NTAPI, RtlAcquirePebLock
+        )
+        {
+            LOAD_FUNCTION( RtlAcquirePebLock );
+            return pfnRtlAcquirePebLock();
+        }
+
+        // *********************************************************************************************************
         // RtlAcquirePrivilege
         // Undocumented
         // 
@@ -86,6 +172,78 @@ namespace nt_dll {
         {
             LOAD_FUNCTION( RtlAcquirePrivilege );
             return pfnRtlAcquirePrivilege( Privilege, NumPriv, Flags, ReturnedState );
+        }
+
+        // *********************************************************************************************************
+        // RtlAcquireReleaseSRWLockExclusive
+        // Undocumented
+        // 
+
+        NT_DLL_FUNCTION(
+            VOID, NTAPI, RtlAcquireReleaseSRWLockExclusive,
+            _In_ PRTL_SRWLOCK SRWLock
+        )
+        {
+            LOAD_FUNCTION( RtlAcquireReleaseSRWLockExclusive );
+            return pfnRtlAcquireReleaseSRWLockExclusive( SRWLock );
+        }
+
+        // *********************************************************************************************************
+        // RtlAcquireResourceExclusive
+        // Undocumented
+        // 
+
+        NT_DLL_FUNCTION(
+            BOOLEAN, NTAPI, RtlAcquireResourceExclusive,
+            _In_ PRTL_RESOURCE Resource,
+            _In_ BOOLEAN       Wait
+        )
+        {
+            LOAD_FUNCTION( RtlAcquireResourceExclusive );
+            return pfnRtlAcquireResourceExclusive( Resource, Wait );
+        }
+
+        // *********************************************************************************************************
+        // RtlAcquireResourceShared
+        // Undocumented
+        // 
+
+        NT_DLL_FUNCTION(
+            BOOLEAN, NTAPI, RtlAcquireResourceShared,
+            _In_ PRTL_RESOURCE Resource,
+            _In_ BOOLEAN       Wait
+        )
+        {
+            LOAD_FUNCTION( RtlAcquireResourceShared );
+            return pfnRtlAcquireResourceShared( Resource, Wait );
+        }
+
+        // *********************************************************************************************************
+        // RtlAcquireSRWLockExclusive
+        // Undocumented
+        // 
+
+        NT_DLL_FUNCTION(
+            VOID, NTAPI, RtlAcquireSRWLockExclusive,
+            _In_ PRTL_SRWLOCK SRWLock
+        )
+        {
+            LOAD_FUNCTION( RtlAcquireSRWLockExclusive );
+            return pfnRtlAcquireSRWLockExclusive( SRWLock );
+        }
+
+        // *********************************************************************************************************
+        // RtlAcquireSRWLockShared
+        // Undocumented
+        // 
+
+        NT_DLL_FUNCTION(
+            VOID, NTAPI, RtlAcquireSRWLockShared,
+            _In_ PRTL_SRWLOCK SRWLock
+        )
+        {
+            LOAD_FUNCTION( RtlAcquireSRWLockShared );
+            return pfnRtlAcquireSRWLockShared( SRWLock );
         }
 
         // *********************************************************************************************************
@@ -217,6 +375,48 @@ namespace nt_dll {
         }
 
         // *********************************************************************************************************
+        // RtlAddActionToRXact
+        // Undocumented
+        // 
+        
+        NT_DLL_FUNCTION(
+            NTSTATUS, NTAPI, RtlAddActionToRXact,
+            _In_     PRTL_RXACT_CONTEXT  RXactContext,
+            _In_     RTL_RXACT_OPERATION Operation,
+            _In_     PUNICODE_STRING     SubKeyName,
+            _In_     ULONG               NewKeyValueType,
+            _In_opt_ PVOID               NewKeyValue,
+            _In_     ULONG               NewKeyValueLength
+        )
+        {
+            LOAD_FUNCTION( RtlAddActionToRXact );
+            return pfnRtlAddActionToRXact( RXactContext, Operation, SubKeyName, NewKeyValueType, NewKeyValue, NewKeyValueLength );
+        }
+
+        // *********************************************************************************************************
+        // RtlAddAttributeActionToRXact
+        // Undocumented
+        // 
+
+        NT_DLL_FUNCTION(
+            NTSTATUS, NTAPI, RtlAddAttributeActionToRXact,
+            _In_ PRTL_RXACT_CONTEXT  RXactContext,
+            _In_ RTL_RXACT_OPERATION Operation,
+            _In_ PUNICODE_STRING     SubKeyName,
+            _In_ HANDLE              KeyHandle,
+            _In_ PUNICODE_STRING     AttributeName,
+            _In_ ULONG               NewValueType,
+            _In_ PVOID               NewValue,
+            _In_ ULONG               NewValueLength
+        )
+        {
+            LOAD_FUNCTION( RtlAddAttributeActionToRXact );
+            return pfnRtlAddAttributeActionToRXact( 
+                RXactContext, Operation, SubKeyName, KeyHandle, AttributeName, NewValueType, NewValue, NewValueLength 
+            );
+        }
+
+        // *********************************************************************************************************
         // RtlAddAuditAccessAce
         // Undocumented
         // 
@@ -331,6 +531,60 @@ namespace nt_dll {
         {
             LOAD_FUNCTION( RtlAddGrowableFunctionTable );
             return pfnRtlAddGrowableFunctionTable( DynamicTable, FunctionTable, EntryCount, MaximumEntryCount, RangeBase, RangeEnd );
+        }
+
+        // *********************************************************************************************************
+        // RtlAddIntegrityLabelToBoundaryDescriptor
+        // Undocumented
+        // 
+
+        NT_DLL_FUNCTION(
+            NTSTATUS, NTAPI, RtlAddIntegrityLabelToBoundaryDescriptor,
+            _Inout_ PVOID* BoundaryDescriptor,
+            _In_    PSID   IntegrityLabel
+        )
+        {
+            LOAD_FUNCTION( RtlAddIntegrityLabelToBoundaryDescriptor );
+            return pfnRtlAddIntegrityLabelToBoundaryDescriptor( BoundaryDescriptor, IntegrityLabel );
+        }
+
+        // *********************************************************************************************************
+        // RtlAddMandatoryAce
+        // Undocumented
+        // 
+
+        NT_DLL_FUNCTION(
+            NTSTATUS, WINAPI, RtlAddMandatoryAce,
+            _Inout_ PACL  pAcl,
+            _In_    DWORD dwAceRevision,
+            _In_    DWORD dwAceFlags,
+            _In_    DWORD dwMandatoryFlags,
+            _In_    DWORD dwAceType,
+            _In_    PSID  pSid
+        )
+        {
+            LOAD_FUNCTION( RtlAddMandatoryAce );
+            return pfnRtlAddMandatoryAce( pAcl, dwAceRevision, dwAceFlags, dwMandatoryFlags, dwAceType, pSid );
+        }
+
+        // *********************************************************************************************************
+        // RtlAddRange
+        // Undocumented
+        // 
+
+        NT_DLL_FUNCTION(
+            NTSTATUS, NTAPI, RtlAddRange, 
+            _Inout_  PRTL_RANGE_LIST RangeList,
+            _In_     ULONGLONG       Start,
+            _In_     ULONGLONG       End,
+            _In_     UCHAR           Attributes,
+            _In_     ULONG           Flags,
+            _In_opt_ PVOID           UserData,
+            _In_opt_ PVOID           Owner
+        )
+        {
+            LOAD_FUNCTION( RtlAddRange );
+            return pfnRtlAddRange( RangeList, Start, End, Attributes, Flags, UserData, Owner );
         }
 
         // *********************************************************************************************************
@@ -599,6 +853,61 @@ namespace nt_dll {
         }
 
         // *********************************************************************************************************
+        // RtlAppendUnicodeStringToString 
+        // https://docs.microsoft.com/en-us/windows-hardware/drivers/ddi/wdm/nf-wdm-rtlappendunicodestringtostring
+        //
+
+        NT_DLL_FUNCTION(
+            NTSTATUS, NTAPI, RtlAppendUnicodeStringToString,
+            _Inout_ PUNICODE_STRING  Destination,
+            _In_    PCUNICODE_STRING Source
+        )
+        {
+            LOAD_FUNCTION( RtlAppendUnicodeStringToString );
+            return pfnRtlAppendUnicodeStringToString( Destination, Source );
+        }
+
+        // *********************************************************************************************************
+        // RtlAppendUnicodeToString 
+        // https://docs.microsoft.com/en-us/windows-hardware/drivers/ddi/wdm/nf-wdm-rtlappendunicodetostring
+        //
+
+        NT_DLL_FUNCTION(
+            NTSTATUS, NTAPI, RtlAppendUnicodeToString,
+            _Inout_ PUNICODE_STRING Destination,
+            _In_    PCWSTR          Source
+        )
+        {
+            LOAD_FUNCTION( RtlAppendUnicodeToString );
+            return pfnRtlAppendUnicodeToString( Destination, Source );
+        }
+
+        // *********************************************************************************************************
+        // RtlApplicationVerifierStop
+        // Undocumented
+        //
+
+        NT_DLL_FUNCTION(
+            VOID, NTAPI, RtlApplicationVerifierStop,
+            _In_ ULONG_PTR Code,
+            _In_ PCSTR     Message,
+            _In_ PVOID     Value1,
+            _In_ PCSTR     Description1,
+            _In_ PVOID     Value2,
+            _In_ PCSTR     Description2,
+            _In_ PVOID     Value3,
+            _In_ PCSTR     Description3,
+            _In_ PVOID     Value4,
+            _In_ PCSTR     Description4
+        )
+        {
+            LOAD_FUNCTION( RtlApplicationVerifierStop );
+            return pfnRtlApplicationVerifierStop(
+                Code, Message, Value1, Description1, Value2, Description2, Value3, Description3, Value4, Description4
+            );
+        }
+
+        // *********************************************************************************************************
         // RtlComputeCrc32
         // Undocumented
         //
@@ -614,16 +923,26 @@ namespace nt_dll {
             return pfnRtlComputeCrc32( dwInitial, pbData, iLen );
         }
 
+#pragma endregion
+
         // ---------------------------------------------------------------------------------------------------------
         //                                            Nt functions
         // ---------------------------------------------------------------------------------------------------------
 
+#pragma region Nt functions
+
         // None implemented yet
+
+#pragma endregion
 
         // ---------------------------------------------------------------------------------------------------------
         //                                            Zw functions
         // ---------------------------------------------------------------------------------------------------------
         
+#pragma region Zw functions
+
         // None implemented yet
+
+#pragma endregion
     };
 } // namespace nt_dll
