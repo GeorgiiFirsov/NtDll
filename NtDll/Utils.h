@@ -76,6 +76,24 @@ namespace utils {
     // Macro used to determine current code location easily
 #   define CURRENT_LOCATION nt_dll::utils::CCodeLocation{ __LINE__, TEXT( __FILE__ ), TEXT( __FUNCTION__ ) }
 
+    // std::result_of is deprecated in C++17 and not available in C++20
+    // That's the reason to define own trait.
+#if defined(_HAS_CXX17) && _HAS_CXX17
+
+    template<typename Func, typename... Args>
+    struct result_type_of
+        : std::invoke_result<Func, Args...>
+    { };
+
+#else
+
+	template<typename Func, typename... Args>
+	struct result_type_of
+		: std::result_of<Func(Args...)>
+	{ };
+
+#endif
+
     // 
     // Classes and structs
     // 

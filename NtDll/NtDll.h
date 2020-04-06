@@ -57,7 +57,7 @@ namespace nt_dll {
         // argument. Other arguments will be forwarded to callable via perfect
         // forwarding. Return type will be deduced automatically.
         template<typename FuncPtr, typename... Args> 
-        static typename std::result_of<FuncPtr(Args...)>::type 
+        static typename utils::result_type_of<FuncPtr, Args...>::type 
         CallSpecific( const std::string& sFunctionName, Args&&... args )
         {
             //
