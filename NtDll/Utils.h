@@ -87,10 +87,10 @@ namespace utils {
 
 #else
 
-	template<typename Func, typename... Args>
-	struct result_type_of
-		: std::result_of<Func(Args...)>
-	{ };
+    template<typename Func, typename... Args>
+    struct result_type_of
+        : std::result_of<Func(Args...)>
+    { };
 
 #endif
 

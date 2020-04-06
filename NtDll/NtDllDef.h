@@ -103,11 +103,11 @@ __if_not_exists(_UNICODE_STRING)
 {
     typedef struct _UNICODE_STRING {
         USHORT Length;
-		USHORT MaximumLength;
+        USHORT MaximumLength;
 #ifdef MIDL_PASS
-		[size_is(MaximumLength / 2), length_is((Length) / 2)] USHORT* Buffer;
+        [size_is(MaximumLength / 2), length_is((Length) / 2)] USHORT* Buffer;
 #else // MIDL_PASS
-		_Field_size_bytes_part_opt_(MaximumLength, Length) PWCH   Buffer;
+        _Field_size_bytes_part_opt_(MaximumLength, Length) PWCH   Buffer;
 #endif // MIDL_PASS
     } UNICODE_STRING;
 };
@@ -126,9 +126,9 @@ __if_not_exists(_STRING)
 {
     typedef struct _STRING {
         USHORT Length;
-		USHORT MaximumLength;
+        USHORT MaximumLength;
 #ifdef MIDL_PASS
-		[size_is(MaximumLength), length_is(Length)]
+        [size_is(MaximumLength), length_is(Length)]
 #endif // MIDL_PASS
         _Field_size_bytes_part_opt_(MaximumLength, Length) PCHAR Buffer;
     } STRING;
