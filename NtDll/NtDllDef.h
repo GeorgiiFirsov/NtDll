@@ -1,5 +1,14 @@
 #pragma once
 
+/***********************************************************
+ * Copyright: 2020, Georgy Firsov                          *
+ *                                                         *
+ * Project:   NtDll                                        *
+ *                                                         *
+ * Author:    Georgy Firsov                                *
+ * Contact:   gfirsov007@gmail.com                         *
+ ***********************************************************/
+
 #include <Windows.h>
 
 // This file contains necessary structs, that are not defined

@@ -1,3 +1,12 @@
+/***********************************************************
+ * Copyright: 2020, Georgy Firsov                          *
+ *                                                         *
+ * Project:   NtDll                                        *
+ *                                                         *
+ * Author:    Georgy Firsov                                *
+ * Contact:   gfirsov007@gmail.com                         *
+ ***********************************************************/
+
 #include "pch.h"
 
 // I disable this annoying warning, because MSVC 19.22 (my compiler)

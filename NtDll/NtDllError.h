@@ -1,5 +1,14 @@
 #pragma once
 
+/***********************************************************
+ * Copyright: 2020, Georgy Firsov                          *
+ *                                                         *
+ * Project:   NtDll                                        *
+ *                                                         *
+ * Author:    Georgy Firsov                                *
+ * Contact:   gfirsov007@gmail.com                         *
+ ***********************************************************/
+
 // Windows header files
 #include <Windows.h>
 
