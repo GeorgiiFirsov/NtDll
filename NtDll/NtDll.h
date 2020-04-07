@@ -597,11 +597,11 @@ namespace nt_dll {
 
         NT_DLL_FUNCTION(
             ULONG, NTAPI, RtlAddRefMemoryStream,
-            _In_ IStream* Stream
+            _In_ IStream* This
         )
         {
             LOAD_FUNCTION( RtlAddRefMemoryStream );
-            return pfnRtlAddRefMemoryStream( Stream );
+            return pfnRtlAddRefMemoryStream( This );
         }
 
         // *********************************************************************************************************
@@ -736,7 +736,7 @@ namespace nt_dll {
         // 
 
         NT_DLL_FUNCTION(
-            _Result_nullonfailure_ RTL_HANDLE*, NTAPI, RtlAllocateHandle,
+            RTL_HANDLE*, NTAPI, RtlAllocateHandle,
             _Inout_ RTL_HANDLE_TABLE* HandleTable,
             _Out_   ULONG*            HandleIndex
         )
@@ -960,8 +960,8 @@ namespace nt_dll {
 
         NT_DLL_FUNCTION(
             NTSTATUS, NTAPI, RtlAppxIsFileOwnedByTrustedInstaller,
-            _In_     HANDLE   FileHandle,
-            _Outptr_ PBOOLEAN IsFileOwnedByTrustedInstaller
+            _In_  HANDLE   FileHandle,
+            _Out_ PBOOLEAN IsFileOwnedByTrustedInstaller
         )
         {
             LOAD_FUNCTION( RtlAppxIsFileOwnedByTrustedInstaller );
@@ -1086,8 +1086,8 @@ namespace nt_dll {
 
         NT_DLL_FUNCTION(
             NTSTATUS, NTAPI, RtlCancelTimer,
-            _Inout_                    HANDLE TimerQueue,
-            _Inout_ _Post_ptr_invalid_ HANDLE Timer
+            _Inout_                HANDLE TimerQueue,
+            _Inout_ _Post_invalid_ HANDLE Timer
         )
         {
             LOAD_FUNCTION( RtlCancelTimer );
@@ -1131,10 +1131,10 @@ namespace nt_dll {
 
         NT_DLL_FUNCTION(
             USHORT, NTAPI, RtlCaptureStackBackTrace,
-            _In_         ULONG  FramesToSkip,
-            _In_         ULONG  FramesToCapture,
-            _Outptr_     PVOID* BackTrace,
-            _Outptr_opt_ PULONG BackTraceHash
+            _In_      ULONG  FramesToSkip,
+            _In_      ULONG  FramesToCapture,
+            _Out_     PVOID* BackTrace,
+            _Out_opt_ PULONG BackTraceHash
         )
         {
             LOAD_FUNCTION( RtlCaptureStackBackTrace );
@@ -1148,9 +1148,9 @@ namespace nt_dll {
 
         NT_DLL_FUNCTION(
             NTSTATUS, NTAPI, RtlCharToInteger,
-            _In_ _Literal_ PCSZ   String,
-            _In_           ULONG  Base,
-            _Outptr_       PULONG Value
+            _In_     PCSZ   String,
+            _In_     ULONG  Base,
+            _Outptr_ PULONG Value
         )
         {
             LOAD_FUNCTION( RtlCharToInteger );
@@ -1202,6 +1202,292 @@ namespace nt_dll {
         }
 
         // *********************************************************************************************************
+        // RtlCheckTokenCapability
+        // Undocumented
+        //
+
+        NT_DLL_FUNCTION(
+            NTSTATUS, NTAPI, RtlCheckTokenCapability,
+            _In_opt_ HANDLE   TokenHandle,
+            _In_     PSID     CapabilitySidToCheck,
+            _Out_    PBOOLEAN HasCapability
+        )
+        {
+            LOAD_FUNCTION( RtlCheckTokenCapability );
+            return pfnRtlCheckTokenCapability( TokenHandle, CapabilitySidToCheck, HasCapability );
+        }
+
+        // *********************************************************************************************************
+        // RtlCheckTokenMembership
+        // Undocumented
+        //
+
+        NT_DLL_FUNCTION(
+            NTSTATUS, NTAPI, RtlCheckTokenMembership,
+            _In_opt_ HANDLE   TokenHandle,
+            _In_     PSID     SidToCheck,
+            _Out_    PBOOLEAN IsMember
+        )
+        {
+            LOAD_FUNCTION( RtlCheckTokenMembership );
+            return pfnRtlCheckTokenMembership( TokenHandle, SidToCheck, IsMember );
+        }
+
+        // *********************************************************************************************************
+        // RtlCheckTokenMembershipEx
+        // Undocumented
+        //
+
+        NT_DLL_FUNCTION(
+            NTSTATUS, NTAPI, RtlCheckTokenMembershipEx,
+            _In_opt_ HANDLE   TokenHandle,
+            _In_     PSID     SidToCheck,
+            _In_     ULONG    Flags,
+            _Out_    PBOOLEAN IsMember
+        )
+        {
+            LOAD_FUNCTION( RtlCheckTokenMembershipEx );
+            return pfnRtlCheckTokenMembershipEx( TokenHandle, SidToCheck, Flags, IsMember );
+        }
+
+        // *********************************************************************************************************
+        // RtlCleanUpTEBLangLists
+        // Undocumented
+        //
+
+        NT_DLL_FUNCTION(
+            VOID, NTAPI, RtlCleanUpTEBLangLists
+        )
+        {
+            LOAD_FUNCTION( RtlCleanUpTEBLangLists );
+            return pfnRtlCleanUpTEBLangLists();
+        }
+
+        // *********************************************************************************************************
+        // RtlClearAllBits
+        // https://docs.microsoft.com/en-us/windows-hardware/drivers/ddi/wdm/nf-wdm-rtlclearallbits
+        //
+
+        NT_DLL_FUNCTION(
+            VOID, NTAPI, RtlClearAllBits,
+            _In_ PRTL_BITMAP BitMapHeader
+        )
+        {
+            LOAD_FUNCTION( RtlClearAllBits );
+            return pfnRtlClearAllBits( BitMapHeader );
+        }
+
+        // *********************************************************************************************************
+        // RtlClearBit
+        // https://docs.microsoft.com/en-us/windows-hardware/drivers/ddi/wdm/nf-wdm-rtlclearbit
+        //
+
+        NT_DLL_FUNCTION(
+            VOID, NTAPI, RtlClearBit,
+            _In_ PRTL_BITMAP BitMapHeader,
+            _In_ ULONG       BitNumber
+        )
+        {
+            LOAD_FUNCTION( RtlClearBit );
+            return pfnRtlClearBit( BitMapHeader, BitNumber );
+        }
+
+        // *********************************************************************************************************
+        // RtlClearBits
+        // https://docs.microsoft.com/en-us/windows-hardware/drivers/ddi/wdm/nf-wdm-rtlclearbits
+        //
+
+        NT_DLL_FUNCTION(
+            VOID, NTAPI, RtlClearBits,
+            _In_ PRTL_BITMAP BitMapHeader,
+            _In_ ULONG       StartingIndex,
+            _In_ ULONG       NumberToClear
+        )
+        {
+            LOAD_FUNCTION( RtlClearBits );
+            return pfnRtlClearBits( BitMapHeader, StartingIndex, NumberToClear );
+        }
+
+        // *********************************************************************************************************
+        // RtlCloneMemoryStream
+        // Undocumented
+        //
+
+        NT_DLL_FUNCTION(
+            HRESULT, NTAPI, RtlCloneMemoryStream,
+            _In_  IStream*  This,
+            _Out_ IStream** ResultStream
+        )
+        {
+            LOAD_FUNCTION( RtlCloneMemoryStream );
+            return pfnRtlCloneMemoryStream( This, ResultStream );
+        }
+
+        // *********************************************************************************************************
+        // RtlCmDecodeMemIoResource
+        // https://docs.microsoft.com/en-us/windows-hardware/drivers/ddi/wdm/nf-wdm-rtlcmdecodememioresource
+        //
+
+        NT_DLL_FUNCTION(
+            ULONGLONG, NTAPI, RtlCmDecodeMemIoResource,
+            _In_  PCM_PARTIAL_RESOURCE_DESCRIPTOR Descriptor,
+            _Out_ PULONGLONG                      Start
+        )
+        {
+            LOAD_FUNCTION( RtlCmDecodeMemIoResource );
+            return pfnRtlCmDecodeMemIoResource( Descriptor, Start );
+        }
+
+        // *********************************************************************************************************
+        // RtlCmEncodeMemIoResource
+        // https://docs.microsoft.com/en-us/windows-hardware/drivers/ddi/wdm/nf-wdm-rtlcmencodememioresource
+        //
+
+        NT_DLL_FUNCTION(
+            NTSTATUS, NTAPI, RtlCmEncodeMemIoResource,
+            _Inout_ PCM_PARTIAL_RESOURCE_DESCRIPTOR Descriptor,
+            _In_    UCHAR                           Type,
+            _In_    ULONGLONG                       Length,
+            _In_    ULONGLONG                       Start
+        )
+        {
+            LOAD_FUNCTION( RtlCmEncodeMemIoResource );
+            return pfnRtlCmEncodeMemIoResource( Descriptor, Type, Length, Start );
+        }
+
+        // *********************************************************************************************************
+        // RtlCommitMemoryStream
+        // Undocumented
+        //
+
+        NT_DLL_FUNCTION(
+            PVOID, NTAPI, RtlCommitMemoryStream,
+            _In_ IStream* This,
+            _In_ ULONG    CommitFlags
+        )
+        {
+            LOAD_FUNCTION( RtlCommitMemoryStream );
+            return pfnRtlCommitMemoryStream( This, CommitFlags );
+        }
+
+        // *********************************************************************************************************
+        // RtlCompactHeap
+        // Undocumented
+        //
+
+        NT_DLL_FUNCTION(
+            ULONG, NTAPI, RtlCompactHeap,
+            _In_ HANDLE HeapHandle,
+            _In_ ULONG  Flags
+        )
+        {
+            LOAD_FUNCTION( RtlCompactHeap );
+            return pfnRtlCompactHeap( HeapHandle, Flags );
+        }
+
+        // *********************************************************************************************************
+        // RtlCompareAltitudes
+        // Undocumented
+        //
+
+        NT_DLL_FUNCTION(
+            LONG, NTAPI, RtlCompareAltitudes,
+            _In_ PUNICODE_STRING Altitude1,
+            _In_ PUNICODE_STRING Altitude2
+        )
+        {
+            LOAD_FUNCTION( RtlCompareAltitudes );
+            return pfnRtlCompareAltitudes( Altitude1, Altitude2 );
+        }
+
+        // *********************************************************************************************************
+        // RtlCompareMemory
+        // https://docs.microsoft.com/en-us/windows-hardware/drivers/ddi/wdm/nf-wdm-rtlcomparememory
+        //
+
+        NT_DLL_FUNCTION(
+            SIZE_T, NTAPI, RtlCompareMemory,
+            _In_ CONST VOID* Source1,
+            _In_ CONST VOID* Source2
+        )
+        {
+            LOAD_FUNCTION( RtlCompareMemory );
+            return pfnRtlCompareMemory( Source1, Source2 );
+        }
+
+        // *********************************************************************************************************
+        // RtlCompareMemoryUlong
+        // https://docs.microsoft.com/en-us/windows-hardware/drivers/ddi/ntifs/nf-ntifs-rtlcomparememoryulong
+        //
+
+        NT_DLL_FUNCTION(
+            SIZE_T, NTAPI, RtlCompareMemoryUlong,
+            _In_ PVOID  Source,
+            _In_ SIZE_T Length,
+            _In_ ULONG  Pattern
+        )
+        {
+            LOAD_FUNCTION( RtlCompareMemoryUlong );
+            return pfnRtlCompareMemoryUlong( Source, Length, Pattern );
+        }
+
+        // *********************************************************************************************************
+        // RtlCompareString
+        // https://docs.microsoft.com/en-us/windows-hardware/drivers/ddi/ntddk/nf-ntddk-rtlcomparestring
+        //
+
+        NT_DLL_FUNCTION(
+            LONG, NTAPI, RtlCompareString,
+            _In_ CONST STRING* String1,
+            _In_ CONST STRING* String2,
+            _In_ BOOLEAN       CaseInSensetive
+        )
+        {
+            LOAD_FUNCTION( RtlCompareString );
+            return pfnRtlCompareString( String1, String2, CaseInSensetive );
+        }
+
+        // *********************************************************************************************************
+        // RtlCompareUnicodeString
+        // https://docs.microsoft.com/en-us/windows-hardware/drivers/ddi/wdm/nf-wdm-rtlcompareunicodestring
+        //
+
+        NT_DLL_FUNCTION(
+            LONG, NTAPI, RtlCompareUnicodeString,
+            _In_ PUNICODE_STRING String1,
+            _In_ PUNICODE_STRING String2,
+            _In_ BOOLEAN         CaseInSensetive
+        )
+        {
+            LOAD_FUNCTION( RtlCompareUnicodeString );
+            return pfnRtlCompareUnicodeString( String1, String2, CaseInSensetive );
+        }
+
+        // *********************************************************************************************************
+        // RtlCompressBuffer
+        // https://docs.microsoft.com/en-us/windows-hardware/drivers/ddi/ntifs/nf-ntifs-rtlcompressbuffer
+        //
+
+        NT_DLL_FUNCTION(
+            NTSTATUS, NTAPI, RtlCompressBuffer,
+            _In_  USHORT CompressionFormatAndEngine,
+            _In_  PUCHAR UncompressedBuffer,
+            _In_  ULONG  UncompressedBufferSize,
+            _Out_ PUCHAR CompressedBuffer,
+            _In_  ULONG  CompressedBufferSize,
+            _In_  ULONG  UncompressedChunkSize,
+            _Out_ PULONG FinalCompressedSize,
+            _In_  PVOID  WorkSpace
+        )
+        {
+            LOAD_FUNCTION( RtlCompressBuffer );
+            return pfnRtlCompressBuffer( 
+                CompressionFormatAndEngine, UncompressedBuffer, UncompressedBufferSize, CompressedBuffer, 
+                CompressedBufferSize, UncompressedChunkSize, FinalCompressedSize, WorkSpace 
+            );
+        }
+
+        // *********************************************************************************************************
         // RtlComputeCrc32
         // Undocumented
         //
@@ -1215,6 +1501,55 @@ namespace nt_dll {
         {
             LOAD_FUNCTION( RtlComputeCrc32 );
             return pfnRtlComputeCrc32( dwInitial, pbData, iLen );
+        }
+
+        // *********************************************************************************************************
+        // RtlComputeImportTableHash
+        // Undocumented
+        //
+
+        NT_DLL_FUNCTION(
+            NTSTATUS, NTAPI, RtlComputeImportTableHash,
+            _In_  HANDLE FileHandle,
+            _Out_ PCHAR  Hash,
+            _In_  ULONG  ImportTableHashSize
+        )
+        {
+            LOAD_FUNCTION( RtlComputeImportTableHash );
+            return pfnRtlComputeImportTableHash( FileHandle, Hash, ImportTableHashSize );
+        }
+
+        // *********************************************************************************************************
+        // RtlComputePrivatizedDllName_U
+        // Undocumented
+        //
+
+        NT_DLL_FUNCTION(
+            NTSTATUS, NTAPI, RtlComputePrivatizedDllName_U,
+            _In_    PUNICODE_STRING DllName,
+            _Inout_ PUNICODE_STRING RealName,
+            _Inout_ PUNICODE_STRING LocalName
+        )
+        {
+            LOAD_FUNCTION( RtlComputePrivatizedDllName_U );
+            return pfnRtlComputePrivatizedDllName_U( DllName, RealName, LocalName );
+        }
+
+        // *********************************************************************************************************
+        // RtlConnectToSm
+        // Undocumented
+        //
+
+        NT_DLL_FUNCTION(
+            NTSTATUS, NTAPI, RtlConnectToSm,
+            _In_  PUNICODE_STRING ApiPortName,
+            _In_  HANDLE          ApiPortHandle,
+            _In_  DWORD           ProcessImageType,
+            _Out_ PHANDLE         SmssConnection
+        )
+        {
+            LOAD_FUNCTION( RtlConnectToSm );
+            return pfnRtlConnectToSm( ApiPortName, ApiPortHandle, ProcessImageType, SmssConnection );
         }
 
 #pragma endregion

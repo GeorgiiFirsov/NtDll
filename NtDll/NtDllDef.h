@@ -219,6 +219,142 @@ __if_not_exists(_RTL_UNICODE_STRING_BUFFER)
     typedef struct _RTL_UNICODE_STRING_BUFFER {
         UNICODE_STRING String;
         RTL_BUFFER     ByteBuffer;
-        UCHAR          MinimumStaticBufferForTerminalNul[sizeof(WCHAR)];
+        UCHAR          MinimumStaticBufferForTerminalNul[sizeof( WCHAR )];
     } RTL_UNICODE_STRING_BUFFER, * PRTL_UNICODE_STRING_BUFFER;
+};
+
+__if_not_exists(_LARGE_INTEGER)
+{
+#if defined(MIDL_PASS)
+    typedef struct _LARGE_INTEGER {
+#else // MIDL_PASS
+    typedef union _LARGE_INTEGER {
+        struct {
+            ULONG LowPart;
+            LONG HighPart;
+        } DUMMYSTRUCTNAME;
+
+        struct {
+            ULONG LowPart;
+            LONG HighPart;
+        } u;
+#endif //MIDL_PASS
+        LONGLONG QuadPart;
+    } LARGE_INTEGER;
+};
+
+__if_not_exists(PHYSICAL_ADDRESS)
+{
+    typedef LARGE_INTEGER PHYSICAL_ADDRESS, * PPHYSICAL_ADDRESS;
+}
+
+__if_not_exists(KAFFINITY)
+{
+    typedef ULONG_PTR KAFFINITY;
+};
+
+__if_not_exists(_CM_PARTIAL_RESOURCE_DESCRIPTOR)
+{
+    typedef struct _CM_PARTIAL_RESOURCE_DESCRIPTOR {
+        UCHAR  Type;
+        UCHAR  ShareDisposition;
+        USHORT Flags;
+
+        union {
+            struct {
+                PHYSICAL_ADDRESS Start;
+                ULONG            Length;
+            } Generic;
+
+            struct {
+                PHYSICAL_ADDRESS Start;
+                ULONG            Length;
+            } Port;
+
+            struct {
+                ULONG     Level;
+                ULONG     Vector;
+                KAFFINITY Affinity;
+            } Interrupt;
+
+            struct {
+                union {
+                    struct {
+                        USHORT    Group;
+                        USHORT    Reserved;
+                        USHORT    MessageCount;
+                        ULONG     Vector;
+                        KAFFINITY Affinity;
+                    } Raw;
+
+                    struct {
+                        ULONG     Level;
+                        ULONG     Vector;
+                        KAFFINITY Affinity;
+                    } Translated;
+                } DUMMYUNIONNAME;
+            } MessageInterrupt;
+
+            struct {
+                PHYSICAL_ADDRESS Start;
+                ULONG            Length;
+            } Memory;
+
+            struct {
+                ULONG Channel;
+                ULONG Port;
+                ULONG Reserved1;
+            } Dma;
+
+            struct {
+                ULONG Channel;
+                ULONG RequestLine;
+                UCHAR TransferWidth;
+                UCHAR Reserved1;
+                UCHAR Reserved2;
+                UCHAR Reserved3;
+            } DmaV3;
+
+            struct {
+                ULONG Data[3];
+            } DevicePrivate;
+
+            struct {
+                ULONG Start;
+                ULONG Length;
+                ULONG Reserved;
+            } BusNumber;
+
+            struct {
+                ULONG DataSize;
+                ULONG Reserved1;
+                ULONG Reserved2;
+            } DeviceSpecificData;
+
+            struct {
+                PHYSICAL_ADDRESS Start;
+                ULONG            Length40;
+            } Memory40;
+
+            struct {
+                PHYSICAL_ADDRESS Start;
+                ULONG            Length48;
+            } Memory48;
+
+            struct {
+                PHYSICAL_ADDRESS Start;
+                ULONG            Length64;
+            } Memory64;
+
+            struct {
+                UCHAR Class;
+                UCHAR Type;
+                UCHAR Reserved1;
+                UCHAR Reserved2;
+                ULONG IdLowPart;
+                ULONG IdHighPart;
+            } Connection;
+
+        } u;
+    } CM_PARTIAL_RESOURCE_DESCRIPTOR, * PCM_PARTIAL_RESOURCE_DESCRIPTOR;
 };
