@@ -10,16 +10,14 @@
 
 __if_not_exists(_RTL_HANDLE)
 {
-    typedef struct _RTL_HANDLE
-    {
+    typedef struct _RTL_HANDLE {
         struct _RTL_HANDLE* Next;
     } RTL_HANDLE, * PRTL_HANDLE;
 };
 
 __if_not_exists(_RTL_HANDLE_TABLE)
 {
-    typedef struct _RTL_HANDLE_TABLE
-    {
+    typedef struct _RTL_HANDLE_TABLE {
         ULONG MaxHandleCount;
         ULONG HandleSize;
         ULONG Unused[2];
@@ -32,8 +30,7 @@ __if_not_exists(_RTL_HANDLE_TABLE)
 
 __if_not_exists(_RTL_BITMAP)
 {
-    typedef struct _RTL_BITMAP
-    {
+    typedef struct _RTL_BITMAP {
         ULONG SizeOfBitMap;
         ULONG* Buffer;
     } RTL_BITMAP, * PRTL_BITMAP;
