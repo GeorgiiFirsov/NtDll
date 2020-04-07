@@ -379,6 +379,8 @@ namespace nt_dll {
         // Undocumented
         // 
         
+#pragma warning( push )
+#pragma warning( disable: 26812 ) // The enum type '_RTL_RXACT_OPERATION' is unscoped.
         NT_DLL_FUNCTION(
             NTSTATUS, NTAPI, RtlAddActionToRXact,
             _In_     PRTL_RXACT_CONTEXT  RXactContext,
@@ -415,6 +417,7 @@ namespace nt_dll {
                 RXactContext, Operation, SubKeyName, KeyHandle, AttributeName, NewValueType, NewValue, NewValueLength 
             );
         }
+#pragma warning( pop ) // 26812
 
         // *********************************************************************************************************
         // RtlAddAuditAccessAce
@@ -728,6 +731,21 @@ namespace nt_dll {
         }
 
         // *********************************************************************************************************
+        // RtlAllocateHandle 
+        // Undocumented
+        // 
+
+        NT_DLL_FUNCTION(
+            _Result_nullonfailure_ RTL_HANDLE*, NTAPI, RtlAllocateHandle,
+            _Inout_ RTL_HANDLE_TABLE* HandleTable,
+            _Out_   ULONG*            HandleIndex
+        )
+        {
+            LOAD_FUNCTION( RtlAllocateHandle );
+            return pfnRtlAllocateHandle( HandleTable, HandleIndex );
+        }
+
+        // *********************************************************************************************************
         // RtlAllocateHeap 
         // https://docs.microsoft.com/en-us/windows-hardware/drivers/ddi/ntifs/nf-ntifs-rtlallocateheap
         // 
@@ -821,20 +839,20 @@ namespace nt_dll {
         }
 
         // *********************************************************************************************************
-        // RtlAppendPathElementGo 
+        // RtlAppendPathElement 
         // Undocumented
         //
 
         NT_DLL_FUNCTION(
-            NTSTATUS, WINAPI, RtlAppendPathElementGo,
+            NTSTATUS, WINAPI, RtlAppendPathElement,
             _In_    ULONG                      Flags,
             _Inout_ PRTL_UNICODE_STRING_BUFFER pStrBuffer,
             _In_    PCUNICODE_STRING           pAddend
 
         )
         {
-            LOAD_FUNCTION( RtlAppendPathElementGo );
-            return pfnRtlAppendPathElementGo( Flags, pStrBuffer, pAddend );
+            LOAD_FUNCTION( RtlAppendPathElement );
+            return pfnRtlAppendPathElement( Flags, pStrBuffer, pAddend );
         }
 
         // *********************************************************************************************************
@@ -905,6 +923,282 @@ namespace nt_dll {
             return pfnRtlApplicationVerifierStop(
                 Code, Message, Value1, Description1, Value2, Description2, Value3, Description3, Value4, Description4
             );
+        }
+
+        // *********************************************************************************************************
+        // RtlApplyRXact
+        // Undocumented
+        //
+
+        NT_DLL_FUNCTION(
+            NTSTATUS, NTAPI, RtlApplyRXact,
+            _In_ PRTL_RXACT_CONTEXT RXactContext
+        )
+        {
+            LOAD_FUNCTION( RtlApplyRXact );
+            return pfnRtlApplyRXact( RXactContext );
+        }
+
+        // *********************************************************************************************************
+        // RtlApplyRXactNoFlush
+        // Undocumented
+        //
+
+        NT_DLL_FUNCTION(
+            NTSTATUS, NTAPI, RtlApplyRXactNoFlush,
+            _In_ PRTL_RXACT_CONTEXT RXactContext
+        )
+        {
+            LOAD_FUNCTION( RtlApplyRXactNoFlush );
+            return pfnRtlApplyRXactNoFlush( RXactContext );
+        }
+
+        // *********************************************************************************************************
+        // RtlAppxIsFileOwnedByTrustedInstaller
+        // Undocumented
+        //
+
+        NT_DLL_FUNCTION(
+            NTSTATUS, NTAPI, RtlAppxIsFileOwnedByTrustedInstaller,
+            _In_     HANDLE   FileHandle,
+            _Outptr_ PBOOLEAN IsFileOwnedByTrustedInstaller
+        )
+        {
+            LOAD_FUNCTION( RtlAppxIsFileOwnedByTrustedInstaller );
+            return pfnRtlAppxIsFileOwnedByTrustedInstaller( FileHandle, IsFileOwnedByTrustedInstaller );
+        }
+
+        // *********************************************************************************************************
+        // RtlAreAllAccessesGranted  
+        // Undocumented
+        //
+
+        NT_DLL_FUNCTION(
+            BOOLEAN, NTAPI, RtlAreAllAccessesGranted,
+            _In_ ACCESS_MASK GrantedAccess,
+            _In_ ACCESS_MASK DesiredAccess
+        )
+        {
+            LOAD_FUNCTION( RtlAreAllAccessesGranted );
+            return pfnRtlAreAllAccessesGranted( GrantedAccess, DesiredAccess );
+        }
+
+        // *********************************************************************************************************
+        // RtlAreAnyAccessesGranted  
+        // Undocumented
+        //
+
+        NT_DLL_FUNCTION(
+            BOOLEAN, NTAPI, RtlAreAnyAccessesGranted,
+            _In_ ACCESS_MASK GrantedAccess,
+            _In_ ACCESS_MASK DesiredAccess
+        )
+        {
+            LOAD_FUNCTION( RtlAreAnyAccessesGranted );
+            return pfnRtlAreAnyAccessesGranted( GrantedAccess, DesiredAccess );
+        }
+
+        // *********************************************************************************************************
+        // RtlAreBitsClear  
+        // https://docs.microsoft.com/en-us/windows-hardware/drivers/ddi/wdm/nf-wdm-rtlarebitsclear
+        //
+
+        NT_DLL_FUNCTION(
+            BOOLEAN, NTAPI, RtlAreBitsClear,
+            _In_ PRTL_BITMAP BitMapHeader,
+            _In_ ULONG       StartingIndex,
+            _In_ ULONG       Length
+        )
+        {
+            LOAD_FUNCTION( RtlAreBitsClear );
+            return pfnRtlAreBitsClear( BitMapHeader, StartingIndex, Length );
+        }
+
+        // *********************************************************************************************************
+        // RtlAreBitsClear  
+        // https://docs.microsoft.com/en-us/windows-hardware/drivers/ddi/wdm/nf-wdm-rtlarebitsclear
+        //
+
+        NT_DLL_FUNCTION(
+            BOOLEAN, NTAPI, RtlAreBitsSet,
+            _In_ PRTL_BITMAP BitMapHeader,
+            _In_ ULONG       StartingIndex,
+            _In_ ULONG       Length
+        )
+        {
+            LOAD_FUNCTION( RtlAreBitsSet );
+            return pfnRtlAreBitsSet( BitMapHeader, StartingIndex, Length );
+        }
+
+        // *********************************************************************************************************
+        // RtlAssert  
+        // Documentation for RxAssert: https://docs.microsoft.com/en-us/windows-hardware/drivers/ifs/rxassert
+        //
+
+        NT_DLL_FUNCTION(
+            VOID, NTAPI, RtlAssert,
+            _In_     PVOID FailedAssertion,
+            _In_     PVOID FileName,
+            _In_     ULONG LineNumber,
+            _In_opt_ PCHAR Message
+        )
+        {
+            #if defined(_DEBUG) && _DEBUG || defined(DEBUG) && DEBUG
+                LOAD_FUNCTION( RtlAssert );
+                return pfnRtlAssert( FailedAssertion, FileName, LineNumber, Message );
+            #endif // debug build
+        }
+
+        // *********************************************************************************************************
+        // RtlBarrier
+        // Undocumented
+        //
+
+        NT_DLL_FUNCTION(
+            BOOLEAN, NTAPI, RtlBarrier,
+            _Inout_ PRTL_BARRIER Barrier,
+            _In_    ULONG        Flags
+        )
+        {
+            LOAD_FUNCTION( RtlBarrier );
+            return pfnRtlBarrier( Barrier, Flags );
+        }
+
+        // *********************************************************************************************************
+        // RtlBarrierForDelete
+        // Undocumented
+        //
+
+        NT_DLL_FUNCTION(
+            BOOLEAN, NTAPI, RtlBarrierForDelete,
+            _Inout_ PRTL_BARRIER Barrier,
+            _In_    ULONG        Flags
+        )
+        {
+            LOAD_FUNCTION( RtlBarrierForDelete );
+            return pfnRtlBarrierForDelete( Barrier, Flags );
+        }
+
+        // *********************************************************************************************************
+        // RtlCancelTimer
+        // Undocumented
+        //
+
+        NT_DLL_FUNCTION(
+            NTSTATUS, NTAPI, RtlCancelTimer,
+            _Inout_                    HANDLE TimerQueue,
+            _Inout_ _Post_ptr_invalid_ HANDLE Timer
+        )
+        {
+            LOAD_FUNCTION( RtlCancelTimer );
+            return pfnRtlCancelTimer( TimerQueue, Timer );
+        }
+
+        // *********************************************************************************************************
+        // RtlCapabilityCheck
+        // Undocumented
+        //
+        
+        NT_DLL_FUNCTION(
+            NTSTATUS, NTAPI, RtlCapabilityCheck,
+            _In_opt_ HANDLE          TokenHandle,
+            _In_     PUNICODE_STRING CapatibilityName,
+            _Out_    PBOOLEAN        HasCapatibility
+        )
+        {
+            LOAD_FUNCTION( RtlCapabilityCheck );
+            return pfnRtlCapabilityCheck( TokenHandle, CapatibilityName, HasCapatibility );
+        }
+
+        // *********************************************************************************************************
+        // RtlCaptureContext
+        // https://docs.microsoft.com/en-us/windows/win32/api/winnt/nf-winnt-rtlcapturecontext
+        //
+        
+        NT_DLL_FUNCTION(
+            VOID, NTAPI, RtlCaptureContext,
+            _Out_ PCONTEXT Context
+        )
+        {
+            LOAD_FUNCTION( RtlCaptureContext );
+            return pfnRtlCaptureContext( Context );
+        }
+
+        // *********************************************************************************************************
+        // RtlCaptureStackBackTrace
+        // https://docs.microsoft.com/en-us/windows-hardware/drivers/ddi/ntifs/nf-ntifs-rtlcapturestackbacktrace
+        //
+
+        NT_DLL_FUNCTION(
+            USHORT, NTAPI, RtlCaptureStackBackTrace,
+            _In_         ULONG  FramesToSkip,
+            _In_         ULONG  FramesToCapture,
+            _Outptr_     PVOID* BackTrace,
+            _Outptr_opt_ PULONG BackTraceHash
+        )
+        {
+            LOAD_FUNCTION( RtlCaptureStackBackTrace );
+            return pfnRtlCaptureStackBackTrace( FramesToSkip, FramesToCapture, BackTrace, BackTraceHash );
+        }
+
+        // *********************************************************************************************************
+        // RtlCharToInteger
+        // https://docs.microsoft.com/en-us/windows/win32/api/winternl/nf-winternl-rtlchartointeger
+        //
+
+        NT_DLL_FUNCTION(
+            NTSTATUS, NTAPI, RtlCharToInteger,
+            _In_ _Literal_ PCSZ   String,
+            _In_           ULONG  Base,
+            _Outptr_       PULONG Value
+        )
+        {
+            LOAD_FUNCTION( RtlCharToInteger );
+            return pfnRtlCharToInteger( String, Base, Value );
+        }
+
+        // *********************************************************************************************************
+        // RtlCheckForOrphanedCriticalSections
+        // Undocumented
+        //
+
+        NT_DLL_FUNCTION(
+            VOID, NTAPI, RtlCheckForOrphanedCriticalSections,
+            _In_ HANDLE ThreadHandle
+        )
+        {
+            LOAD_FUNCTION( RtlCheckForOrphanedCriticalSections );
+            return pfnRtlCheckForOrphanedCriticalSections( ThreadHandle );
+        }
+
+        // *********************************************************************************************************
+        // RtlCheckRegistryKey
+        // https://docs.microsoft.com/en-us/windows-hardware/drivers/ddi/wdm/nf-wdm-rtlcheckregistrykey
+        //
+
+        NT_DLL_FUNCTION(
+            NTSTATUS, NTAPI, RtlCheckRegistryKey,
+            _In_ ULONG RelativeTo,
+            _In_ PWSTR Path
+        )
+        {
+            LOAD_FUNCTION( RtlCheckRegistryKey );
+            return pfnRtlCheckRegistryKey( RelativeTo, Path );
+        }
+
+        // *********************************************************************************************************
+        // RtlCheckSandboxedToken
+        // Undocumented
+        //
+
+        NT_DLL_FUNCTION(
+            NTSTATUS, NTAPI, RtlCheckSandboxedToken,
+            _In_  HANDLE   TokenHandle,
+            _Out_ PBOOLEAN IsSandboxedToken
+        )
+        {
+            LOAD_FUNCTION( RtlCheckSandboxedToken );
+            return pfnRtlCheckSandboxedToken( TokenHandle, IsSandboxedToken );
         }
 
         // *********************************************************************************************************

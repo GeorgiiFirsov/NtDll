@@ -8,6 +8,37 @@
 // is surrounded with '__if_not_exists' block and compiles if and 
 // only if there's no such structure exists
 
+__if_not_exists(_RTL_HANDLE)
+{
+    typedef struct _RTL_HANDLE
+    {
+        struct _RTL_HANDLE* Next;
+    } RTL_HANDLE, * PRTL_HANDLE;
+};
+
+__if_not_exists(_RTL_HANDLE_TABLE)
+{
+    typedef struct _RTL_HANDLE_TABLE
+    {
+        ULONG MaxHandleCount;
+        ULONG HandleSize;
+        ULONG Unused[2];
+        PCHAR NextFree;
+        PCHAR FirstHandle;
+        PCHAR ReservedMemory;
+        PCHAR MaxHandle;
+    } RTL_HANDLE_TABLE, * PRTL_HANDLE_TABLE;
+};
+
+__if_not_exists(_RTL_BITMAP)
+{
+    typedef struct _RTL_BITMAP
+    {
+        ULONG SizeOfBitMap;
+        ULONG* Buffer;
+    } RTL_BITMAP, * PRTL_BITMAP;
+}
+
 __if_not_exists(_RTL_RXACT_LOG)
 {
     typedef struct _RTL_RXACT_LOG {
