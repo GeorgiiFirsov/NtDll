@@ -21,6 +21,15 @@
 #include "NtDllError.h"
 #include "Utils.h"
 
+// Macro wrappers used to prevent compilation errors caused by undefined marco definitions.
+// These macro wrappes all have '_INTERNAL' suffix, it differs them from original definitions.
+#if defined(DECLSPEC_DEPRECATED_DDK_WINXP)
+#   define DECLSPEC_DEPRECATED_DDK_WINXP_INTERNAL DECLSPEC_DEPRECATED_DDK_WINXP
+#else
+#   define DECLSPEC_DEPRECATED_DDK_WINXP_INTERNAL /* Not defined - skip */
+#endif // defined(DECLSPEC_DEPRECATED_DDK_WINXP)
+
+
 // Macro used to declare an NtDll member. It expands into a type alias declaration
 // for function type with the name 'PFunctionName', where 'FunctionName' is a name
 // of the function to be declared. Macro makes a static class function declaration
@@ -1559,6 +1568,336 @@ namespace nt_dll {
         {
             LOAD_FUNCTION( RtlConnectToSm );
             return pfnRtlConnectToSm( ApiPortName, ApiPortHandle, ProcessImageType, SmssConnection );
+        }
+
+        // *********************************************************************************************************
+        // RtlConsoleMultiByteToUnicodeN
+        // Undocumented
+        //
+
+        NT_DLL_FUNCTION(
+            NTSTATUS, NTAPI, RtlConsoleMultiByteToUnicodeN,
+            _Out_writes_bytes_to_(
+                MaxBytesInUnicodeString, *BytesInUnicodeString ) PWCH   UnicodeString,
+            _In_                                                 ULONG  MaxBytesInUnicodeString,
+            _Out_opt_                                            PULONG BytesInUnicodeString,
+            _In_reads_bytes_(BytesInMultiByteString)             PCH    MultiByteString,
+            _In_                                                 ULONG  BytesInMultiByteString,
+            _Out_                                                PULONG pdwSpecialChar
+        )
+        {
+            LOAD_FUNCTION( RtlConsoleMultiByteToUnicodeN );
+            return pfnRtlConsoleMultiByteToUnicodeN( 
+                UnicodeString, MaxBytesInUnicodeString, BytesInUnicodeString,
+                MultiByteString, BytesInMultiByteString, pdwSpecialChar 
+            );
+        }
+
+        // *********************************************************************************************************
+        // RtlContractHashTable
+        // Undocumented
+        //
+
+        NT_DLL_FUNCTION(
+            BOOLEAN, NTAPI, RtlContractHashTable,
+            _In_ PRTL_DYNAMIC_HASH_TABLE HashTable
+        )
+        {
+            LOAD_FUNCTION( RtlContractHashTable );
+            return pfnRtlContractHashTable( HashTable );
+        }
+
+        // *********************************************************************************************************
+        // RtlConvertExclusiveToShared
+        // Undocumented
+        //
+
+        NT_DLL_FUNCTION(
+            VOID, NTAPI, RtlConvertExclusiveToShared,
+            _In_ PRTL_RESOURCE Resource
+        )
+        {
+            LOAD_FUNCTION( RtlConvertExclusiveToShared );
+            return pfnRtlConvertExclusiveToShared( Resource );
+        }
+
+        // *********************************************************************************************************
+        // RtlConvertLCIDToString
+        // Undocumented
+        //
+
+        NT_DLL_FUNCTION(
+            NTSTATUS, NTAPI, RtlConvertLCIDToString,
+            _In_               LCID  LcidValue,
+            _In_               ULONG Base,
+            _In_               ULONG Padding,
+            _Out_writes_(Size) PWSTR ResultBuffer,
+            _In_               ULONG Size
+        )
+        {
+            LOAD_FUNCTION( RtlConvertLCIDToString );
+            return pfnRtlConvertLCIDToString( LcidValue, Base, Padding, ResultBuffer, Size );
+        }
+
+        // *********************************************************************************************************
+        // RtlConvertLongToLargeInteger
+        // https://docs.microsoft.com/en-us/windows-hardware/drivers/ddi/wdm/nf-wdm-rtlconvertlongtolargeinteger
+        //
+
+        NT_DLL_FUNCTION( DECLSPEC_DEPRECATED_DDK_WINXP_INTERNAL 
+            LARGE_INTEGER, NTAPI_INLINE, RtlConvertLongToLargeInteger,
+            _In_ LONG SignedInteger
+        )
+        {
+            LOAD_FUNCTION( RtlConvertLongToLargeInteger );
+            return pfnRtlConvertLongToLargeInteger( SignedInteger );
+        }
+
+        // *********************************************************************************************************
+        // RtlConvertSharedToExclusive
+        // Undocumented
+        //
+
+        NT_DLL_FUNCTION(
+            VOID, NTAPI, RtlConvertSharedToExclusive,
+            _In_  PRTL_RESOURCE Resource
+        )
+        {
+            LOAD_FUNCTION( RtlConvertSharedToExclusive );
+            return pfnRtlConvertSharedToExclusive( Resource );
+        }
+
+        // *********************************************************************************************************
+        // RtlConvertSidToUnicodeString
+        // https://docs.microsoft.com/en-us/windows/win32/api/winternl/nf-winternl-rtlconvertsidtounicodestring
+        //
+
+        NT_DLL_FUNCTION(
+            NTSTATUS, NTAPI, RtlConvertSidToUnicodeString,
+            _Out_ PUNICODE_STRING UnicodeString,
+            _In_  PSID            Sid,
+            _In_  BOOLEAN         AllocateDestinationString
+        )
+        {
+            LOAD_FUNCTION( RtlConvertSidToUnicodeString );
+            return pfnRtlConvertSidToUnicodeString( UnicodeString, Sid, AllocateDestinationString );
+        }
+
+        // *********************************************************************************************************
+        // RtlConvertToAutoInheritSecurityObject
+        // Undocumented
+        //
+
+        NT_DLL_FUNCTION(
+            NTSTATUS, NTAPI, RtlConvertToAutoInheritSecurityObject,
+            _In_opt_ PSECURITY_DESCRIPTOR  ParentDescriptor,
+            _In_     PSECURITY_DESCRIPTOR  CurrentSecurityDescriptor,
+            _Out_    PSECURITY_DESCRIPTOR* NewSecurityDescriptor,
+            _In_opt_ GUID*                 ObjectType,
+            _In_     BOOLEAN               IsDirectoryObject,
+            _In_     PGENERIC_MAPPING      GenericMapping
+        )
+        {
+            LOAD_FUNCTION( RtlConvertToAutoInheritSecurityObject );
+            return pfnRtlConvertToAutoInheritSecurityObject(
+                ParentDescriptor, CurrentSecurityDescriptor, NewSecurityDescriptor,
+                ObjectType, IsDirectoryObject, GenericMapping
+            );
+        }
+
+        // *********************************************************************************************************
+        // RtlConvertUlongToLargeInteger
+        // https://docs.microsoft.com/en-us/windows-hardware/drivers/ddi/wdm/nf-wdm-rtlconvertulongtolargeinteger
+        //
+
+        NT_DLL_FUNCTION( DECLSPEC_DEPRECATED_DDK_WINXP_INTERNAL
+            LARGE_INTEGER, NTAPI_INLINE, RtlConvertUlongToLargeInteger,
+            _In_ ULONG UnsignedInteger
+        )
+        {
+            LOAD_FUNCTION( RtlConvertUlongToLargeInteger );
+            return pfnRtlConvertUlongToLargeInteger( UnsignedInteger );
+        }
+
+        // *********************************************************************************************************
+        // RtlCopyBitMap
+        // Undocumented
+        //
+
+        NT_DLL_FUNCTION(
+            VOID, NTAPI, RtlCopyBitMap,
+            _In_  PRTL_BITMAP Source,
+            _Out_ PRTL_BITMAP Destination,
+            _In_  ULONG       TargetBit
+        )
+        {
+            LOAD_FUNCTION( RtlCopyBitMap );
+            return pfnRtlCopyBitMap( Source, Destination, TargetBit );
+        }
+
+        // *********************************************************************************************************
+        // RtlCopyLuid
+        // https://docs.microsoft.com/en-us/windows-hardware/drivers/ddi/ntifs/nf-ntifs-rtlcopyluid
+        //
+
+        NT_DLL_FUNCTION(
+            VOID, NTAPI, RtlCopyLuid,
+            _Out_ PLUID DestinationLuid,
+            _In_  PLUID SourceLuid
+        )
+        {
+            LOAD_FUNCTION( RtlCopyLuid );
+            return pfnRtlCopyLuid( DestinationLuid, SourceLuid );
+        }
+
+        // *********************************************************************************************************
+        // RtlCopyLuidAndAttributesArray
+        // Undocumented
+        //
+
+        NT_DLL_FUNCTION(
+            VOID, NTAPI, RtlCopyLuidAndAttributesArray,
+            _In_                    ULONG                Count,
+            _In_reads_(Count)       PLUID_AND_ATTRIBUTES Source,
+            _Out_writes_all_(Count) PLUID_AND_ATTRIBUTES Destination
+        )
+        {
+            LOAD_FUNCTION( RtlCopyLuidAndAttributesArray );
+            return pfnRtlCopyLuidAndAttributesArray( Count, Source, Destination );
+        }
+
+        // *********************************************************************************************************
+        // RtlCopyMappedMemory
+        // Undocumented
+        //
+
+        NT_DLL_FUNCTION(
+            NTSTATUS, NTAPI, RtlCopyMappedMemory,
+            _Out_writes_bytes_all_(BytesToCopy) LPVOID  Destination,
+            _In_reads_bytes_(BytesToCopy)       LPCVOID Source,
+            _In_                                SIZE_T  BytesToCopy
+        )
+        {
+            LOAD_FUNCTION( RtlCopyMappedMemory );
+            return pfnRtlCopyMappedMemory( Destination, Source, BytesToCopy );
+        }
+
+        // *********************************************************************************************************
+        // RtlCopyMemoryNonTemporal
+        // https://docs.microsoft.com/en-us/windows-hardware/drivers/ddi/wdm/nf-wdm-rtlcopymemorynontemporal
+        //
+
+        NT_DLL_FUNCTION(
+            VOID, NTAPI, RtlCopyMemoryNonTemporal,
+            _Out_writes_bytes_all_(Length) LPVOID  Destination,
+            _In_reads_bytes_(Length)       LPCVOID Source,
+            _In_                           SIZE_T  Length
+        )
+        {
+            LOAD_FUNCTION( RtlCopyMemoryNonTemporal );
+            return pfnRtlCopyMemoryNonTemporal( Destination, Source, Length );
+        }
+
+        // *********************************************************************************************************
+        // RtlCopyMemoryStreamTo
+        // Undocumented
+        //
+
+        NT_DLL_FUNCTION(
+            HRESULT, NTAPI, RtlCopyMemoryStreamTo,
+            _In_      IStream*        This,
+            _In_      IStream*        Target,
+            _In_      ULARGE_INTEGER  Length,
+            _Out_opt_ PULARGE_INTEGER BytesRead,
+            _Out_opt_ PULARGE_INTEGER BytesWritten
+        )
+        {
+            LOAD_FUNCTION( RtlCopyMemoryStreamTo );
+            return pfnRtlCopyMemoryStreamTo( This, Target, Length, BytesRead, BytesWritten );
+        }
+
+        // *********************************************************************************************************
+        // RtlCopySecurityDescriptor
+        // Undocumented
+        //
+
+        NT_DLL_FUNCTION(
+            NTSTATUS, NTAPI, RtlCopySecurityDescriptor,
+            _In_  PSECURITY_DESCRIPTOR  SourceSecurityDescriptor,
+            _Out_ PSECURITY_DESCRIPTOR* DestinationSecurityDescriptor
+        )
+        {
+            LOAD_FUNCTION( RtlCopySecurityDescriptor );
+            return pfnRtlCopySecurityDescriptor( SourceSecurityDescriptor, DestinationSecurityDescriptor );
+        }
+
+        // *********************************************************************************************************
+        // RtlCopySid
+        // https://docs.microsoft.com/en-us/windows-hardware/drivers/ddi/ntifs/nf-ntifs-rtlcopysid
+        //
+
+        NT_DLL_FUNCTION(
+            NTSTATUS, NTAPI, RtlCopySid,
+            _In_  ULONG DestinationSidLength,
+            _Out_ PSID  DestinationSid,
+            _In_  PSID  SourceSid
+        )
+        {
+            LOAD_FUNCTION( RtlCopySid );
+            return pfnRtlCopySid( DestinationSidLength, DestinationSid, SourceSid );
+        }
+
+        // *********************************************************************************************************
+        // RtlCopySidAndAttributesArray
+        // Undocumented
+        //
+
+        NT_DLL_FUNCTION(
+            NTSTATUS, NTAPI, RtlCopySidAndAttributesArray,
+            _In_                    ULONG               ArrayLength,
+            _In_reads_(ArratLength) PSID_AND_ATTRIBUTES Source,
+            _In_                    ULONG               TargetSidBufferSize,
+            _Out_                   PSID_AND_ATTRIBUTES TargetArrayElement,
+            _Out_                   PSID                TargetSid,
+            _Out_                   PSID*               NextTargetSid,
+            _Out_                   PULONG              RemainingTargetSidBufferSize
+        )
+        {
+            LOAD_FUNCTION( RtlCopySidAndAttributesArray );
+            return pfnRtlCopySidAndAttributesArray(
+                ArrayLength, Source, TargetSidBufferSize, TargetArrayElement,
+                TargetSid, NextTargetSid, RemainingTargetSidBufferSize
+            );
+        }
+
+        // *********************************************************************************************************
+        // RtlCopyString
+        // https://docs.microsoft.com/en-us/windows-hardware/drivers/ddi/ntddk/nf-ntddk-rtlcopystring
+        //
+
+        NT_DLL_FUNCTION(
+            VOID, NTAPI, RtlCopyString, 
+            _Out_ PSTRING       DestinationString,
+            _In_  CONST STRING* SourceString
+        )
+        {
+            LOAD_FUNCTION( RtlCopyString );
+            return pfnRtlCopyString( DestinationString, SourceString );
+        }
+
+        // *********************************************************************************************************
+        // RtlCopyUnicodeString
+        // https://docs.microsoft.com/en-us/windows-hardware/drivers/ddi/wdm/nf-wdm-rtlcopyunicodestring
+        //
+
+        NT_DLL_FUNCTION(
+            VOID, NTAPI, RtlCopyUnicodeString,
+            _Out_ PUNICODE_STRING  DestinationString,
+            _In_  PCUNICODE_STRING SourceString
+        )
+        {
+            LOAD_FUNCTION( RtlCopyUnicodeString );
+            return pfnRtlCopyUnicodeString( DestinationString, SourceString );
         }
 
 #pragma endregion

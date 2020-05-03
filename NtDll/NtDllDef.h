@@ -367,3 +367,19 @@ __if_not_exists(_CM_PARTIAL_RESOURCE_DESCRIPTOR)
         } u;
     } CM_PARTIAL_RESOURCE_DESCRIPTOR, * PCM_PARTIAL_RESOURCE_DESCRIPTOR;
 };
+
+__if_not_exists(_RTL_DYNAMIC_HASH_TABLE)
+{
+    typedef struct _RTL_DYNAMIC_HASH_TABLE
+    {
+        ULONG32 Flags;
+        ULONG32 Shift;
+        ULONG32 TableSize;
+        ULONG32 Pivot;
+        ULONG32 DivisorMask;
+        ULONG32 NumEntries;
+        ULONG32 NonEmptyBuckets;
+        ULONG32 NumEnumerators;
+        PVOID   Directory;
+    } RTL_DYNAMIC_HASH_TABLE, * PRTL_DYNAMIC_HASH_TABLE;
+};
