@@ -1855,7 +1855,7 @@ namespace nt_dll {
         NT_DLL_FUNCTION(
             NTSTATUS, NTAPI, RtlCopySidAndAttributesArray,
             _In_                    ULONG               ArrayLength,
-            _In_reads_(ArratLength) PSID_AND_ATTRIBUTES Source,
+            _In_reads_(ArrayLength) PSID_AND_ATTRIBUTES Source,
             _In_                    ULONG               TargetSidBufferSize,
             _Out_                   PSID_AND_ATTRIBUTES TargetArrayElement,
             _Out_                   PSID                TargetSid,
